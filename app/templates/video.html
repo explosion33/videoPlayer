@@ -1,0 +1,146 @@
+<html>
+    <head>
+        <title>Media Player</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/videoControls.css') }}">
+        <script language="JavaScript"  src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="HandheldFriendly" content="true">
+
+        <script>
+            var vid, vid2, playbtn, seekslider, videoTimer;
+
+            var lastStatePaused = 0;
+
+            function initializePlayer(){
+                //initialize elemetns 
+                vid = document.getElementById("video1");
+                vid2 = document.getElementById("video2");
+                playBtn = document.getElementById("playPauseBtn");
+                seekslider = document.getElementById("seekslider");
+                videoTimer = document.getElementById("videoTimer");
+
+                //add event listeners
+                playBtn.addEventListener("click", playpause, false);
+                seekslider.addEventListener("input", vidSeek, false);
+                seekslider.addEventListener("input", pauseSeek, false);
+                seekslider.addEventListener("change", playSeek, false);
+                vid.addEventListener("timeupdate", seektimeupdate, false);
+                
+                //synch buttons
+                if (vid.paused){
+                    playBtn.src = "static/images/play.png";
+                }
+
+                seekslider.value = 0;
+            }
+            window.onload = initializePlayer;
+
+
+            function playpause(){
+                if (vid.paused){
+                    vid.play();
+                    vid2.play();
+                    playBtn.src = "static/images/pause.png";
+                }
+                else {
+                    vid.pause();
+                    vid2.pause();
+                    playBtn.src = "static/images/play.png";
+                }
+            }
+        
+            function vidSeek(){
+                var seekto = vid.duration * (seekslider.value / 100);
+                vid.currentTime = seekto;
+                vid2.currentTime = seekto;
+            }
+
+            function seektimeupdate(){
+                var nt = vid.currentTime * (100 / vid.duration);
+                seekslider.value = nt;
+
+                TOTALSEC = Math.trunc(vid.currentTime);
+                TimeMin = Math.trunc(TOTALSEC/60);
+                TimeSec = TOTALSEC - (TimeMin*60)
+
+                if (TimeMin < 10){
+                    TimeMin = "0" + TimeMin
+                }
+
+                if (TimeSec < 10){
+                    TimeSec = "0" + TimeSec
+                }
+
+                videoTimer.innerHTML = TimeMin + ":" + TimeSec
+
+            }
+
+            function pauseSeek(){
+                console.log("pausinf for seek")
+                if (lastStatePaused === 0){
+                    lastStatePaused = vid.paused;
+                }
+                vid.pause();
+                vid2.pause();
+            }
+
+            function playSeek(){
+                console.log("playing after seek", lastStatePaused);
+                if (!lastStatePaused){
+                    vid.play();
+                    vid2.play();
+                }
+                lastStatePaused = 0;
+            }
+
+        </script>
+
+    </head>
+
+    <body>
+        <div class ="container mt-3">
+            <h1>Play #{{ play }}</h1>
+            <a>Quarter 2</a>
+        </div>
+
+        <div class ="container mt-3">
+            <a href="/increment/1" class="btn btn-block btn-info btn-lg">forward</a>
+        </div>
+
+        <div class ="container mt-3">
+            <a href="/increment/-1" class="btn btn-block btn-info btn-lg">backward</a>
+        </div>
+
+        <br>
+        
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <video width="100%" id="video1" autoplay>
+                        <source src="static/videos/endzone_{{ play }}.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+
+                <div class="col-md-6">
+                    <video width="100%" id="video2" autoplay>
+                        <source src="static/videos/side_{{ play }}.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+
+            </div>
+
+            <div id ="videoControls" class="bar">
+                <input type="image" id="playPauseBtn" src="static/images/pause.png" width=32px>
+                <input type="range" min="0" max="100" value="0" step=0.01 class="custom-range slideLimit" id="seekslider">
+                <a id = "videoTimer">0:00</a>
+            </div>
+
+        </div>
+
+   </body>
+
+
+</html>
