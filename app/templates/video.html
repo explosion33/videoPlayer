@@ -25,8 +25,31 @@
                 seekslider.addEventListener("input", vidSeek, false);
                 seekslider.addEventListener("input", pauseSeek, false);
                 seekslider.addEventListener("change", playSeek, false);
+                vid.addEventListener("ended", videoend, false);
                 vid.addEventListener("timeupdate", seektimeupdate, false);
+
+                document.addEventListener("keypress", function (event) {
+                    if (event.key === " "){
+                        playpause();
+                    }
+                });
                 
+
+                document.addEventListener("keydown", function (event) {
+                    val = 0.01
+                    if (event.key === "ArrowLeft"){
+                        vid.currentTime -= val;
+                        vid2.currentTime -= val;
+                    }
+                    if (event.key === "ArrowRight"){
+                        vid.currentTime += val;
+                        vid2.currentTime += val;
+                    }
+
+                    
+
+                });
+
                 //synch buttons
                 if (vid.paused){
                     playBtn.src = "static/images/play.png";
@@ -38,6 +61,7 @@
 
 
             function playpause(){
+                console.log("playPause");
                 if (vid.paused){
                     vid.play();
                     vid2.play();
@@ -51,18 +75,25 @@
             }
         
             function vidSeek(){
+                console.log("vidSeek");
                 var seekto = vid.duration * (seekslider.value / 100);
                 vid.currentTime = seekto;
                 vid2.currentTime = seekto;
             }
 
             function seektimeupdate(){
+                console.log("seekTimeUpdate");
                 var nt = vid.currentTime * (100 / vid.duration);
                 seekslider.value = nt;
 
                 TOTALSEC = Math.trunc(vid.currentTime);
                 TimeMin = Math.trunc(TOTALSEC/60);
-                TimeSec = TOTALSEC - (TimeMin*60)
+                TimeSec = TOTALSEC - (TimeMin*60);
+                DeciSecs = (vid.currentTime - TimeMin - TimeSec)*100;
+                DeciSecs = Math.trunc(DeciSecs)
+
+
+                console.log(vid.currentTime, DeciSecs)
 
                 if (TimeMin < 10){
                     TimeMin = "0" + TimeMin
@@ -72,11 +103,20 @@
                     TimeSec = "0" + TimeSec
                 }
 
-                videoTimer.innerHTML = TimeMin + ":" + TimeSec
+                if (DeciSecs < 10){
+                    DeciSecs = "0" + DeciSecs
+                }
+
+                if (DeciSecs === 100){
+                    DeciSecs = "00"
+                }
+
+                videoTimer.innerHTML = TimeMin + ":" + TimeSec + ":" + DeciSecs
 
             }
 
             function pauseSeek(){
+                console.log("pauseSeek");
                 console.log("pausinf for seek")
                 if (lastStatePaused === 0){
                     lastStatePaused = vid.paused;
@@ -86,12 +126,18 @@
             }
 
             function playSeek(){
+                console.log("playSeek");
                 console.log("playing after seek", lastStatePaused);
                 if (!lastStatePaused){
                     vid.play();
                     vid2.play();
                 }
                 lastStatePaused = 0;
+            }
+
+            function videoend(){
+                console.log("videoEnd");
+                window.location.href = "/increment/1";
             }
 
         </script>
@@ -133,9 +179,11 @@
             </div>
 
             <div id ="videoControls" class="bar">
-                <input type="image" id="playPauseBtn" src="static/images/pause.png" width=32px>
-                <input type="range" min="0" max="100" value="0" step=0.01 class="custom-range slideLimit" id="seekslider">
-                <a id = "videoTimer">0:00</a>
+                <div class="row justify-content-center">
+                    <input type="image" id="playPauseBtn" src="static/images/pause.png" width=32px>
+                    <input type="range" min="0" max="100" value="0" step=0.01 class="custom-range slideLimit align-self-center" id="seekslider">
+                    <b id = "videoTimer" class="barText align-self-center">00:00:00</b>
+                </div>
             </div>
 
         </div>
