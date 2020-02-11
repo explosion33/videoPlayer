@@ -11,6 +11,10 @@
     color: rgb(255,255,255);
 }
 
+.skip {
+    margin-left: 10px;
+}
+
 #playPauseBtn {
     margin-right: 10px;
 }

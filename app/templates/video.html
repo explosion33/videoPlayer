@@ -19,6 +19,8 @@
                 playBtn = document.getElementById("playPauseBtn");
                 seekslider = document.getElementById("seekslider");
                 videoTimer = document.getElementById("videoTimer");
+                backwardBtn = document.getElementById("backwardBtn");
+                forwardBtn = document.getElementById("forwardBtn");
 
                 //add event listeners
                 playBtn.addEventListener("click", playpause, false);
@@ -27,6 +29,8 @@
                 seekslider.addEventListener("change", playSeek, false);
                 vid.addEventListener("ended", videoend, false);
                 vid.addEventListener("timeupdate", seektimeupdate, false);
+                backwardBtn.addEventListener("click", back, false);
+                forwardBtn.addEventListener("click", forward, false);
 
                 document.addEventListener("keypress", function (event) {
                     if (event.key === " "){
@@ -34,7 +38,6 @@
                     }
                 });
                 
-
                 document.addEventListener("keydown", function (event) {
                     val = 0.01
                     if (event.key === "ArrowLeft"){
@@ -140,6 +143,14 @@
                 window.location.href = "/increment/1";
             }
 
+            function back(){
+                window.location.replace("/increment/-1");
+            }
+            
+            function forward(){
+                window.location.replace("/increment/1");
+            }
+
         </script>
 
     </head>
@@ -183,6 +194,8 @@
                     <input type="image" id="playPauseBtn" src="static/images/pause.png" width=32px>
                     <input type="range" min="0" max="100" value="0" step=0.01 class="custom-range slideLimit align-self-center" id="seekslider">
                     <b id = "videoTimer" class="barText align-self-center">00:00:00</b>
+                    <input type="image" id="backwardBtn" src="static/images/back.png" class="skip align-self-center" width=32px height=21px>
+                    <input type="image" id="forwardBtn" src="static/images/forward.png" class="skip align-self-center" width=32px height=21px>
                 </div>
             </div>
 
