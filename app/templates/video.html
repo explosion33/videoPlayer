@@ -8,9 +8,11 @@
         <meta name="HandheldFriendly" content="true">
 
         <script>
-            var vid, vid2, playbtn, seekslider, videoTimer;
+            var vid, vid2, playbtn, seekslider, videoTimer, backwardBtn, forwardBtn, modeButton;
 
             var lastStatePaused = 0;
+
+            local = window.localStorage;
 
             function initializePlayer(){
                 //initialize elemetns 
@@ -21,6 +23,7 @@
                 videoTimer = document.getElementById("videoTimer");
                 backwardBtn = document.getElementById("backwardBtn");
                 forwardBtn = document.getElementById("forwardBtn");
+                modeButton = document.getElementById("modeButton");
 
                 //add event listeners
                 playBtn.addEventListener("click", playpause, false);
@@ -31,6 +34,7 @@
                 vid.addEventListener("timeupdate", seektimeupdate, false);
                 backwardBtn.addEventListener("click", back, false);
                 forwardBtn.addEventListener("click", forward, false);
+                modeButton.addEventListener("click", changeMode, false)
 
                 document.addEventListener("keypress", function (event) {
                     if (event.key === " "){
@@ -56,6 +60,11 @@
                 //synch buttons
                 if (vid.paused){
                     playBtn.src = "static/images/play.png";
+                }
+
+                console.log(modeButton.textContent);
+                if (local.getItem("mode") !== null){
+                    modeButton.textContent = local.getItem("mode");
                 }
 
                 seekslider.value = 0;
@@ -140,7 +149,16 @@
 
             function videoend(){
                 console.log("videoEnd");
-                window.location.href = "/increment/1";
+                if (modeButton.textContent === "Play Through"){
+                    local.setItem("mode", modeButton.textContent);
+                    window.location.href = "/increment/1";
+                }
+                else {
+                    vid.currentTime = 0;
+                    vid2.currentTime = 0;
+                    vid.play();
+                    vid2.play();
+                }
             }
 
             function back(){
@@ -149,6 +167,17 @@
             
             function forward(){
                 window.location.replace("/increment/1");
+            }
+
+            function changeMode(){
+                text = modeButton.textContent
+                if (text === "Repeat"){
+                    modeButton.textContent = "Play Through"
+                }
+
+                else{
+                    modeButton.textContent = "Repeat"
+                }
             }
 
         </script>
@@ -161,17 +190,13 @@
             <a>Quarter 2</a>
         </div>
 
-        <div class ="container mt-3">
-            <a href="/increment/1" class="btn btn-block btn-info btn-lg">forward</a>
-        </div>
-
-        <div class ="container mt-3">
-            <a href="/increment/-1" class="btn btn-block btn-info btn-lg">backward</a>
-        </div>
-
-        <br>
         
         <div class="container-fluid">
+
+            <button type="button" id="modeButton" class="btn btn-secondary btn-lg align-self-center option">Repeat</button>
+
+            <br>
+
             <div class="row justify-content-center">
                 <div class="col-md-6">
                     <video width="100%" id="video1" autoplay>

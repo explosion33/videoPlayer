@@ -15,6 +15,10 @@
     margin-left: 10px;
 }
 
+.option {
+    width: 165px;
+}
+
 #playPauseBtn {
     margin-right: 10px;
 }
