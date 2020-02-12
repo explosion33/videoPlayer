@@ -64,7 +64,10 @@
 
                 console.log(modeButton.textContent);
                 if (local.getItem("mode") !== null){
-                    modeButton.textContent = local.getItem("mode");
+                    modeButton.alt = local.getItem("mode");
+                    if (modeButton.alt === "1"){
+                        modeButton.src = "static/images/loopNone.png"
+                    }
                 }
 
                 seekslider.value = 0;
@@ -149,8 +152,8 @@
 
             function videoend(){
                 console.log("videoEnd");
-                if (modeButton.textContent === "Play Through"){
-                    local.setItem("mode", modeButton.textContent);
+                if (modeButton.alt === "1"){
+                    local.setItem("mode", modeButton.alt);
                     window.location.href = "/increment/1";
                 }
                 else {
@@ -170,14 +173,18 @@
             }
 
             function changeMode(){
-                text = modeButton.textContent
-                if (text === "Repeat"){
-                    modeButton.textContent = "Play Through"
+                alt = modeButton.alt
+                console.log("alt ", alt)
+                if (alt === "0"){
+                    modeButton.src = "static/images/loopNone.png"
+                    modeButton.alt = "1"
                 }
 
                 else{
-                    modeButton.textContent = "Repeat"
+                    modeButton.src = "static/images/loop.png"
+                    modeButton.alt = "0"
                 }
+                local.setItem("mode", modeButton.alt);
             }
 
         </script>
@@ -193,9 +200,9 @@
         
         <div class="container-fluid">
 
-            <button type="button" id="modeButton" class="btn btn-secondary btn-lg align-self-center option">Repeat</button>
-
-            <br>
+            <div class="bar">
+                <input type="image" src="static/images/loop.png", alt="0" id="modeButton" class="option"></button>
+            </div>
 
             <div class="row justify-content-center">
                 <div class="col-md-6">

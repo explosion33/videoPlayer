@@ -16,7 +16,11 @@
 }
 
 .option {
-    width: 165px;
+    width: 42px;
+}
+
+*:focus {
+    outline: none;
 }
 
 #playPauseBtn {
@@ -24,5 +28,9 @@
 }
 
 #videoTimer {
+    margin-left: 10px
+}
+
+#modeButton {
     margin-left: 10px
 }
