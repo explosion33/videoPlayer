@@ -192,16 +192,30 @@
     </head>
 
     <body>
-        <div class ="container mt-3">
-            <h1>Play #{{ play }}</h1>
-            <a>Quarter 2</a>
+        <div class ="row text">
+            <div class="col-md-3">
+                <div id="playHead">
+                    <h1>Play #{{ play }}</h1>
+                    <a>Quarter 2</a>
+                </div>
+            </div>
+            <div class="col-md-3"></div>
+            <div class="col-md-3"></div>
+            <div class="col-md-3 justify-content-center">
+                <div>
+                    <img id="logo" src="static/images/logo.png" alt="dubl">
+                </div>
+            </div>
+
         </div>
 
+        <br>
+
         
-        <div class="container-fluid">
+        <div class="container-fluid" id="playback">
 
             <div class="bar">
-                <input type="image" src="static/images/loop.png", alt="0" id="modeButton" class="option"></button>
+                
             </div>
 
             <div class="row justify-content-center">
@@ -223,6 +237,7 @@
 
             <div id ="videoControls" class="bar">
                 <div class="row justify-content-center">
+                    <input type="image" src="static/images/loop.png", alt="0" id="modeButton" class="option"></button>
                     <input type="image" id="playPauseBtn" src="static/images/pause.png" width=32px>
                     <input type="range" min="0" max="100" value="0" step=0.01 class="custom-range slideLimit align-self-center" id="seekslider">
                     <b id = "videoTimer" class="barText align-self-center">00:00:00</b>
